@@ -27,6 +27,13 @@ const Message = mongoose.model('Message',{
 
 const dbUrl = process.env.MONGOCONNECTION
 
+app.get('/', (req, res) => {
+    res
+      .status(200)
+      .send('Hello server is running')
+      .end();
+});
+
 app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
     res.send(messages);
