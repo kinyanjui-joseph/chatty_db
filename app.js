@@ -5,10 +5,7 @@ const server = http.createServer(app);
 require('dotenv').config()
 const { Server } = require("socket.io");
 const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+  cors: { origin: "*"}
 });
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -42,6 +39,7 @@ app.get('/messages', (req, res) => {
 
 app.post('/messages', (req, res) => {
   const message = new Message(req.body);
+  io.emit('message', message)
   message.save((err) =>{
     if(err)
     sendStatus(500);
@@ -55,7 +53,6 @@ mongoose.connect(dbUrl, () => {
 io.on('connection', (socket) => {
   console.log('a user connected')
   socket.on('message', async function(msg){
-    io.emit('message', msg);
     console.log(msg)
   })
 
